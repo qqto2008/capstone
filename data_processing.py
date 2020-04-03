@@ -119,7 +119,7 @@ print(Nor['labels'])
 #labels.to_csv("/Users/hongxueying/Downloads/5703/dataset/NIH/sample/NIHlabel.csv", index_label="index_label")
 
 #------------------------------------------------------------------------------
-#reshape the image
+#save the image
 
 """
 
