@@ -41,6 +41,32 @@ for i in range(labels['Finding Labels'].size):
 
 arry = Nor[["Image Index"]].values
 arry_flat = arry.flatten()
+
+Nor.rename(columns=
+            {"Image Index": "image",
+            "Finding Labels": "labels",
+            "Patient Age": "age",
+            "Patient Gender": "gender",
+            "View Position": "position",
+            "OriginalImageWidth": "width",
+            "OriginalImageHeight": "height",
+            "OriginalImagePixelSpacing_x": "space_x",
+            "OriginalImagePixelSpacing_y": "space_y"}, inplace=True)
+
+
+Nor["gender"].replace(["F", "M"],[0, 1],inplace=True)
+
+Nor["age"].replace("411Y", "041Y", inplace=True)
+Nor["age"] = Nor["age"].str.replace("Y","365")  # For Years
+Nor["age"] = Nor["age"].str.replace("M","030")  # For Months
+Nor["age"] = Nor["age"].str.replace("D","001")  # For Days
+Nor["age"] = Nor["age"].astype(float)
+Nor["age"] = (Nor["age"]%1000 * Nor["age"]//1000)//365  # Convert age to years
+
+Nor.replace("No Finding", "Nothing", inplace=True) 
+
+#labels.to_csv("/Users/hongxueying/Downloads/5703/dataset/NIH/sample/NIHlabel.csv", index_label="index_label")
+
 #print(arry_flat.size)
 
 #------------------------------------------------------------------------------
@@ -71,51 +97,16 @@ def load_rawData(data_source=usb,overwrite = False):#../data/raw
 
     return X
 
-#------------------------------------------------------------------------------
-
-Nor.rename(columns=
-            {"Image Index": "image",
-            "Finding Labels": "labels",
-            "Patient Age": "age",
-            "Patient Gender": "gender",
-            "View Position": "position",
-            "OriginalImageWidth": "width",
-            "OriginalImageHeight": "height",
-            "OriginalImagePixelSpacing_x": "space_x",
-            "OriginalImagePixelSpacing_y": "space_y"}, inplace=True)
-
-
-Nor["gender"].replace(["F", "M"],[0, 1],inplace=True)
-
-Nor["age"].replace("411Y", "041Y", inplace=True)
-Nor["age"] = Nor["age"].str.replace("Y","365")  # For Years
-Nor["age"] = Nor["age"].str.replace("M","030")  # For Months
-Nor["age"] = Nor["age"].str.replace("D","001")  # For Days
-Nor["age"] = Nor["age"].astype(float)
-Nor["age"] = (Nor["age"]%1000 * Nor["age"]//1000)//365  # Convert age to years
-
-Nor.replace("No Finding", "Nothing", inplace=True) 
-
-#print(Nor['labels'])
-
-#labels.to_csv("/Users/hongxueying/Downloads/5703/dataset/NIH/sample/NIHlabel.csv", index_label="index_label")
 
 #------------------------------------------------------------------------------
 load_rawData(data_source=usb,overwrite = True)
 
 
 
-
-
 """
 
-#normal_images = []
-
-#print(Nor['Image Index'][0:1])
         
 #images = glob(os.path.join(Sample_images, Nor['Image Index']))
-
-#print(len(image))
 
 #Nor.to_csv("/Users/hongxueying/Downloads/5703/dataset/NIH/sample/Normal_label.csv", index_label="index_label")
 
